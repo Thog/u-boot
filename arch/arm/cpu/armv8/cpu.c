@@ -30,6 +30,8 @@ void sdelay(unsigned long loops)
 			  "b.ne 1b" : "=r" (loops) : "0"(loops) : "cc");
 }
 
+void __weak board_cleanup_before_linux(void){}
+
 int cleanup_before_linux(void)
 {
 	/*
@@ -38,6 +40,9 @@ int cleanup_before_linux(void)
 	 *
 	 * disable interrupt and turn off caches etc ...
 	 */
+
+	board_cleanup_before_linux();
+
 	disable_interrupts();
 
 	/*
