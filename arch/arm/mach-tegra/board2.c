@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
- *  (C) Copyright 2010,2011
+ *  (C) Copyright 2010,2011,2015
  *  NVIDIA Corporation <www.nvidia.com>
  */
 
@@ -30,6 +30,9 @@
 #include <asm/arch/emc.h>
 #endif
 #include "emc.h"
+#ifdef CONFIG_TEGRA210
+#include "tegra210/nvtboot.h"
+#endif
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -181,6 +184,10 @@ void gpio_early_init(void) __attribute__((weak, alias("__gpio_early_init")));
 
 int board_early_init_f(void)
 {
+#ifdef CONFIG_TEGRA210
+	nvtboot_init();
+#endif
+
 	if (!clock_early_init_done())
 		clock_early_init();
 
@@ -237,6 +244,7 @@ int board_late_init(void)
 	return 0;
 }
 
+#ifndef CONFIG_TEGRA210
 /*
  * In some SW environments, a memory carve-out exists to house a secure
  * monitor, a trusted OS, and/or various statically allocated media buffers.
@@ -362,3 +370,4 @@ ulong board_get_usable_ram_top(ulong total_size)
 {
 	return CONFIG_SYS_SDRAM_BASE + usable_ram_size_below_4g();
 }
+#endif
