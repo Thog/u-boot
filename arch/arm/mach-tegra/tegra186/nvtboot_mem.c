@@ -9,6 +9,7 @@
 #include <linux/sizes.h>
 #include <asm/arch/tegra.h>
 #include <asm/armv8/mmu.h>
+#include "../dt-edit.h"
 
 /*
  * Size of a region that's large enough to hold the relocated U-Boot and all
@@ -169,4 +170,9 @@ int dram_init_banksize(void)
 ulong board_get_usable_ram_top(ulong total_size)
 {
 	return ram_top;
+}
+
+void *fdt_copy_get_blob_src_default(void)
+{
+	return (void *)nvtboot_boot_x0;
 }
