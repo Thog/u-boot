@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0+ */
 /*
- * (C) Copyright 2013-2015
+ * (C) Copyright 2013-2016
  * NVIDIA Corporation <www.nvidia.com>
  */
 
@@ -19,6 +19,7 @@
 
 /* I2C */
 #define CONFIG_SYS_I2C_TEGRA
+#define CONFIG_SYS_VI_I2C_TEGRA
 
 /* Environment in eMMC, at the end of 2nd "boot sector" */
 #define CONFIG_SYS_MMC_ENV_DEV		0
@@ -44,5 +45,15 @@
 
 /* Crystal is 38.4MHz. clk_m runs at half that rate */
 #define COUNTER_FREQUENCY	19200000
+
+/* Parse the board ID EEPROM and update DT */
+#define CONFIG_NV_BOARD_ID_EEPROM
+#define CONFIG_NV_BOARD_ID_EEPROM_OF_MAC_ADDRS
+#define CONFIG_NV_BOARD_ID_EEPROM_OF_PLUGIN_MANAGER
+#define CONFIG_NV_BOARD_ID_EEPROM_CAM
+#define EEPROM_I2C_BUS		3
+#define EEPROM_I2C_ADDRESS	0x50
+#define CAM_EEPROM_I2C_BUS	5
+#define CAM_EEPROM_I2C_ADDR	0x54
 
 #endif /* _P2371_2180_H */
