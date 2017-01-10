@@ -9,7 +9,7 @@
 #include <linux/sizes.h>
 #include <asm/arch/tegra.h>
 #include <asm/armv8/mmu.h>
-#include "../dt-edit.h"
+#include "dt-edit.h"
 
 /*
  * Size of a region that's large enough to hold the relocated U-Boot and all
