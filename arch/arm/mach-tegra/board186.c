@@ -21,12 +21,12 @@ int board_init(void)
 	return tegra_board_init();
 }
 
-__weak int tegra_soc_board_init_late(void)
+__weak int nvtboot_init_late(void)
 {
 	return 0;
 }
 
 int board_late_init(void)
 {
-	return tegra_soc_board_init_late();
+	return nvtboot_init_late();
 }
