@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * Copyright (c) 2014-2015, NVIDIA CORPORATION.  All rights reserved.
+ * Copyright (c) 2014-2017, NVIDIA CORPORATION.  All rights reserved.
  */
 
 /* Tegra vpr routines */
@@ -23,6 +23,7 @@ void tegra_gpu_config(void)
 	if (!tegra_cpu_is_non_secure())
 #endif
 	{
+#if !defined(CONFIG_CPU_BL_IS_CBOOT)
 		/* Turn VPR off */
 		writel(0, &mc->mc_video_protect_size_mb);
 		writel(TEGRA_MC_VIDEO_PROTECT_REG_WRITE_ACCESS_DISABLED,
@@ -30,10 +31,10 @@ void tegra_gpu_config(void)
 		/* read back to ensure the write went through */
 		readl(&mc->mc_video_protect_reg_ctrl);
 	}
-
 	debug("configured VPR\n");
 
 	_configured = true;
+#endif
 }
 
 #if defined(CONFIG_OF_LIBFDT)
