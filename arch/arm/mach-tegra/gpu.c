@@ -23,7 +23,7 @@ void tegra_gpu_config(void)
 	if (!tegra_cpu_is_non_secure())
 #endif
 	{
-#if !defined(CONFIG_CPU_BL_IS_CBOOT)
+#if !defined(CONFIG_ARM64)
 		/* Turn VPR off */
 		writel(0, &mc->mc_video_protect_size_mb);
 		writel(TEGRA_MC_VIDEO_PROTECT_REG_WRITE_ACCESS_DISABLED,
@@ -34,7 +34,7 @@ void tegra_gpu_config(void)
 	debug("configured VPR\n");
 
 	_configured = true;
-#endif
+#endif /* !ARM64 */
 }
 
 #if defined(CONFIG_OF_LIBFDT)
