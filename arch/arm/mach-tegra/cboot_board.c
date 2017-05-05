@@ -11,7 +11,7 @@
 #include <asm/arch/tegra.h>
 #include <asm/armv8/mmu.h>
 
-extern unsigned long nvtboot_boot_x0;
+extern unsigned long cboot_boot_x0;
 
 char *strstrip(char *s)
 {
@@ -257,7 +257,7 @@ static void set_calculated_env_vars(void)
 	dump_ram_banks();
 #endif
 
-	reserve_ram(nvtboot_boot_x0, fdt_totalsize(nvtboot_boot_x0));
+	reserve_ram(cboot_boot_x0, fdt_totalsize(cboot_boot_x0));
 
 #ifdef DEBUG
 	printf("RAM after reserving cboot DTB:\n");
@@ -296,7 +296,7 @@ static int set_fdt_addr(void)
 {
 	int ret;
 
-	ret = env_set_hex("fdt_addr", nvtboot_boot_x0);
+	ret = env_set_hex("fdt_addr", cboot_boot_x0);
 	if (ret) {
 		printf("Failed to set fdt_addr to point at DTB: %d\n", ret);
 		return ret;
@@ -307,12 +307,12 @@ static int set_fdt_addr(void)
 
 #if defined(CONFIG_TEGRA186)
 /*
- * Attempt to use /chosen/nvidia,ether-mac in the nvtboot DTB to U-Boot's
+ * Attempt to use /chosen/nvidia,ether-mac in the cboot DTB to U-Boot's
  * ethaddr environment variable if possible.
  */
-static int set_ethaddr_from_nvtboot(void)
+static int set_ethaddr_from_cboot(void)
 {
-	const void *nvtboot_blob = (void *)nvtboot_boot_x0;
+	const void *cboot_blob = (void *)cboot_boot_x0;
 	int ret, node, len;
 	const u32 *prop;
 
@@ -320,20 +320,20 @@ static int set_ethaddr_from_nvtboot(void)
 	if (env_get("ethaddr"))
 		return 0;
 
-	node = fdt_path_offset(nvtboot_blob, "/chosen");
+	node = fdt_path_offset(cboot_blob, "/chosen");
 	if (node < 0) {
-		printf("Can't find /chosen node in nvtboot DTB\n");
+		printf("Can't find /chosen node in cboot DTB\n");
 		return node;
 	}
-	prop = fdt_getprop(nvtboot_blob, node, "nvidia,ether-mac", &len);
+	prop = fdt_getprop(cboot_blob, node, "nvidia,ether-mac", &len);
 	if (!prop) {
-		printf("Can't find nvidia,ether-mac property in nvtboot DTB\n");
+		printf("Can't find nvidia,ether-mac property in cboot DTB\n");
 		return -ENOENT;
 	}
 
 	ret = env_set("ethaddr", (void *)prop);
 	if (ret) {
-		printf("Failed to set ethaddr from nvtboot DTB: %d\n", ret);
+		printf("Failed to set ethaddr from cboot DTB: %d\n", ret);
 		return ret;
 	}
 
@@ -343,7 +343,7 @@ static int set_ethaddr_from_nvtboot(void)
 
 static int set_cbootargs(void)
 {
-	const void *nvtboot_blob = (void *)nvtboot_boot_x0;
+	const void *cboot_blob = (void *)cboot_boot_x0;
 	const void *prop;
 	char *bargs, *s;
 	int node, len, ret = 0;
@@ -353,18 +353,18 @@ static int set_cbootargs(void)
 	 * (CBoot) to the env. (pointer in reg x0)
 	 */
 
-	debug("%s: nvtboot_blob = %p\n", __func__, nvtboot_blob);
+	debug("%s: cboot_blob = %p\n", __func__, cboot_blob);
 
-	node = fdt_path_offset(nvtboot_blob, "/chosen");
+	node = fdt_path_offset(cboot_blob, "/chosen");
 	if (node < 0) {
-		error("Can't find /chosen node in nvtboot DTB");
+		error("Can't find /chosen node in cboot DTB");
 		return node;
 	}
 	debug("%s: found 'chosen' node: %d\n", __func__, node);
 
-	prop = fdt_getprop(nvtboot_blob, node, "bootargs", &len);
+	prop = fdt_getprop(cboot_blob, node, "bootargs", &len);
 	if (!prop) {
-		error("Can't find /chosen/bootargs property in nvtboot DTB");
+		error("Can't find /chosen/bootargs property in cboot DTB");
 		return -ENOENT;
 	}
 	debug("%s: found 'bootargs' property, len =%d\n",  __func__, len);
@@ -383,7 +383,7 @@ static int set_cbootargs(void)
 	return ret;
 }
 
-int nvtboot_init_late(void)
+int cboot_init_late(void)
 {
 	set_calculated_env_vars();
 	/*
@@ -393,7 +393,7 @@ int nvtboot_init_late(void)
 	set_fdt_addr();
 #if defined(CONFIG_TEGRA186)
  	/* Ignore errors here; not all cases care about Ethernet addresses */
- 	set_ethaddr_from_nvtboot();
+	set_ethaddr_from_cboot();
 #endif
 	/* Save CBoot bootargs to env */
 	set_cbootargs();
