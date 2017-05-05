@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
- * Copyright 2013-2016, NVIDIA CORPORATION.
+ * Copyright 2013-2017, NVIDIA CORPORATION.
  */
 
 #ifndef _TEGRA186_COMMON_H_
@@ -50,12 +50,6 @@
 	"pxefile_addr_r=0x90100000\0" \
 	"kernel_addr_r=" __stringify(CONFIG_LOADADDR) "\0" \
 	"fdt_addr_r=0x82000000\0" \
-	"ramdisk_addr_r=0x82100000\0" \
-	"fdt_copy_node_paths=/chosen/plugin-manager\0" \
-	"fdt_copy_prop_paths=/chosen/nvidia,bluetooth-mac:" \
-		"/chosen/nvidia,ether-mac:" \
-		"/chosen/nvidia,wifi-mac:" \
-		"/bpmp/carveout-start:" \
-		"/bpmp/carveout-size\0"
+	"ramdisk_addr_r=0x82100000\0"
 
 #endif

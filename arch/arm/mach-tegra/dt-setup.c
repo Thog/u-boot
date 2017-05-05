@@ -6,7 +6,6 @@
 #include <common.h>
 #include <asm/arch-tegra/gpu.h>
 #include <asm/arch-tegra/board.h>
-#include "dt-edit.h"
 #ifdef CONFIG_TEGRA210
 #include "tegra210/nvtboot.h"
 #endif
@@ -34,11 +33,6 @@ int ft_system_setup(void *blob, bd_t *bd)
 		if (ret)
 			return ret;
 	}
-
-	fdt_copy_env_nodelist(blob);
-	fdt_copy_env_proplist(blob);
-	fdt_del_env_nodelist(blob);
-	fdt_del_env_proplist(blob);
 #ifdef CONFIG_TEGRA210
 	ft_nvtboot(blob);
 #endif
