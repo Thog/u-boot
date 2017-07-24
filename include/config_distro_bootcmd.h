@@ -350,6 +350,12 @@
 #define BOOTENV_BOOT_TARGETS \
 	"boot_targets=" BOOT_TARGET_DEVICES(BOOTENV_DEV_NAME) "\0"
 
+#ifndef BOOT_TARGET_DEFAULTDEVPLIST
+#define BOOT_TARGET_DEFAULTDEVPLIST	"1"
+#endif
+#define BOOTENV_SET_DEFAULTDEVPLIST \
+	"defaultdevplist=" BOOT_TARGET_DEFAULTDEVPLIST "\0"
+
 #define BOOTENV_DEV(devtypeu, devtypel, instance) \
 	BOOTENV_DEV_##devtypeu(devtypeu, devtypel, instance)
 #define BOOTENV \
@@ -362,6 +368,7 @@
 	BOOTENV_SHARED_IDE \
 	BOOTENV_SHARED_UBIFS \
 	BOOTENV_SHARED_EFI \
+	BOOTENV_SET_DEFAULTDEVPLIST \
 	BOOTENV_SHARED_VIRTIO \
 	"boot_prefixes=/ /boot/\0" \
 	"boot_scripts=boot.scr.uimg boot.scr\0" \
@@ -411,7 +418,7 @@
 	\
 	"scan_dev_for_boot_part="                                         \
 		"part list ${devtype} ${devnum} -bootable devplist; "     \
-		"env exists devplist || setenv devplist 1; "              \
+		"env exists devplist || setenv devplist $defaultdevplist; " \
 		"for distro_bootpart in ${devplist}; do "                 \
 			"if fstype ${devtype} "                           \
 					"${devnum}:${distro_bootpart} "   \
