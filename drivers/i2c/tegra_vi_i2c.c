@@ -308,13 +308,12 @@ static int tegra_i2c_probe(struct udevice *dev)
 {
 	struct i2c_bus *i2c_bus = dev_get_priv(dev);
 	const void *blob = gd->fdt_blob;
-	int node = dev->of_offset;
 
 	i2c_bus->id = dev->seq;
 	i2c_bus->regs =
-		(struct i2c_vi_ctlr *)fdtdec_get_addr(blob, node, "reg");
+		(struct i2c_vi_ctlr *)fdtdec_get_addr(blob, dev_of_offset(dev), "reg");
 
-	i2c_bus->periph_id = clock_decode_periph_id(blob, node);
+	i2c_bus->periph_id = clock_decode_periph_id(blob);
 
 	/*
 	 * Unfortunately, U-Boot doesn't yet support multiple 'clocks'

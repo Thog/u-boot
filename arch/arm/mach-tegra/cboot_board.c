@@ -357,14 +357,14 @@ static int set_cbootargs(void)
 
 	node = fdt_path_offset(cboot_blob, "/chosen");
 	if (node < 0) {
-		error("Can't find /chosen node in cboot DTB");
+		pr_err("Can't find /chosen node in cboot DTB");
 		return node;
 	}
 	debug("%s: found 'chosen' node: %d\n", __func__, node);
 
 	prop = fdt_getprop(cboot_blob, node, "bootargs", &len);
 	if (!prop) {
-		error("Can't find /chosen/bootargs property in cboot DTB");
+		pr_err("Can't find /chosen/bootargs property in cboot DTB");
 		return -ENOENT;
 	}
 	debug("%s: found 'bootargs' property, len =%d\n",  __func__, len);
@@ -375,7 +375,7 @@ static int set_cbootargs(void)
 	debug("%s: bootargs = %s!\n", __func__, bargs);
 
         /* Set cbootargs to env for later use by extlinux files */
-	ret = setenv("cbootargs", bargs);
+	ret = env_set("cbootargs", bargs);
 	if (ret)
 		printf("Failed to set cbootargs from cboot DTB: %d\n", ret);
 

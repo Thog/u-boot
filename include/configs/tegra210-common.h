@@ -17,6 +17,11 @@
 /*-----------------------------------------------------------------------
  * Physical Memory Map
  */
+#define CONFIG_SYS_TEXT_BASE	0x80080000	/* chainloaded as faux kernel */
+
+/*-----------------------------------------------------------------------
+ * Physical Memory Map
+ */
 
 /* Generic Interrupt Controller */
 #define CONFIG_GICV2
@@ -46,7 +51,7 @@
  *   for the FDT/DTB to be up to 1M, which is hopefully plenty.
  */
 
-#define CONFIG_LOADADDR	0x80080000	/* chainloaded as faux kernel */
+#define CONFIG_LOADADDR	0x80080000
 #define MEM_LAYOUT_ENV_SETTINGS \
 	"scriptaddr=0x90000000\0" \
 	"pxefile_addr_r=0x90100000\0" \

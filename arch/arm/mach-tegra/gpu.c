@@ -22,8 +22,8 @@ void tegra_gpu_config(void)
 #if defined(CONFIG_TEGRA_SUPPORT_NON_SECURE)
 	if (!tegra_cpu_is_non_secure())
 #endif
-	{
 #if !defined(CONFIG_ARM64)
+	{
 		/* Turn VPR off */
 		writel(0, &mc->mc_video_protect_size_mb);
 		writel(TEGRA_MC_VIDEO_PROTECT_REG_WRITE_ACCESS_DISABLED,

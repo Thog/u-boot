@@ -22,7 +22,7 @@ static int fdt_iter_del_node(void *blob_dst, char *node_path, void *unused_param
 	if (ofs == -FDT_ERR_NOTFOUND)
 		return 0;
 	if (ofs < 0) {
-		error("DT node %s lookup failure; can't del node\n", node_path);
+		pr_err("DT node %s lookup failure; can't del node\n", node_path);
 		return ofs;
 	}
 
@@ -37,7 +37,7 @@ static int fdt_iter_del_prop(void *blob_dst, char *prop_path, void *unused_param
 
 	prop_name = strrchr(prop_path, '/');
 	if (!prop_name) {
-		error("Can't del prop %s; missing /", prop_path);
+		pr_err("Can't del prop %s; missing /", prop_path);
 		return -1;
 	}
 	*prop_name = 0;
@@ -50,7 +50,7 @@ static int fdt_iter_del_prop(void *blob_dst, char *prop_path, void *unused_param
 		if (ofs == -FDT_ERR_NOTFOUND)
 			return 0;
 		if (ofs < 0) {
-			error("DT node %s lookup failure; can't del prop %s\n",
+			pr_err("DT node %s lookup failure; can't del prop %s\n",
 			      node_path, prop_name);
 			return ofs;
 		}
@@ -70,7 +70,7 @@ static int fdt_iter_envlist(iter_envitem *func, void *blob_dst, const char *env_
 	char *items, *tmp, *item;
 	int ret;
 
-	items = getenv(env_varname);
+	items = env_get(env_varname);
 	if (!items) {
 		debug("%s: No env var %s\n", __func__, env_varname);
 		return 0;
@@ -78,7 +78,7 @@ static int fdt_iter_envlist(iter_envitem *func, void *blob_dst, const char *env_
 
 	items = strdup(items);
 	if (!items) {
-		error("strdup(%s) failed", env_varname);
+		pr_err("strdup(%s) failed", env_varname);
 		return -1;
 	}
 
